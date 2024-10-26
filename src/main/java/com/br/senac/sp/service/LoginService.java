@@ -20,7 +20,8 @@ public class LoginService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    private PasswordService passwordService = new PasswordService();
+    @Autowired
+    private PasswordService passwordService;
 
     public ResponseEntity<AutenticacaoLoginDTO> entrar(CredencialDTO credencialDTO) {
         CredencialModel credencial = credencialRepository.buscaPorEmail(credencialDTO.getEmail());

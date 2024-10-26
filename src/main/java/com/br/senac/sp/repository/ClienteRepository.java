@@ -11,4 +11,6 @@ public interface ClienteRepository  extends JpaRepository<ClienteModel, Long> {
     ClienteModel buscaPorNome(String nome);
     @Query("SELECT c FROM ClienteModel c WHERE c.cpf = ?1")
     ClienteModel buscaPorCPF(String cpf);
+    @Query("SELECT c FROM ClienteModel c WHERE c.id = ?1")
+    ClienteModel buscarPorId(Long id);
 }
