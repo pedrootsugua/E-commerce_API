@@ -7,6 +7,7 @@ import com.br.senac.sp.keys.ItemPedidoKey;
 import com.br.senac.sp.model.*;
 import com.br.senac.sp.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -74,4 +75,23 @@ public class PedidoService {
             itemPedidoModel.setId(new ItemPedidoKey(pedidoModel, produtoModel));
             itemPedidoRepository.save(itemPedidoModel);
     }
+    public ResponseEntity<List<PedidoModel>> listarPedidosUsuario(Long id) throws Exception {
+        ClienteModel cliente = clienteRepository.findById(id).orElseThrow(
+                () -> new Exception("Usuário não encontrado com esse ID"));
+
+        List<PedidoModel> pedidos = cliente.getPedidos();
+
+        return new ResponseEntity<>(pedidos, HttpStatus.OK);
+    }
+
+    public ResponseEntity<List<ItemPedidoModel>> listarItensPorPedido(Long pedidoId) throws Exception {
+        PedidoModel pedido = pedidoRepository.findById(pedidoId).orElseThrow(
+                () -> new Exception("Pedido não encontrado com esse ID"));
+
+        List<ItemPedidoModel> itens = itemPedidoRepository.findByIdPedidoId(pedido);
+
+        return new ResponseEntity<>(itens, HttpStatus.OK);
+    }
+
+
 }
