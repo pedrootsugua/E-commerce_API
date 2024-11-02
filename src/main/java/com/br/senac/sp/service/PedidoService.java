@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
@@ -42,13 +44,17 @@ public class PedidoService {
         CredencialClienteModel credencialClienteSalva = credencialClienteRepository.findByClienteId(clienteSalvo);
         EnderecoModel enderecoSalvo = enderecoRepository.findById(pedidoDTO.getEnderecoId()).orElseThrow(
                 () -> new RuntimeException("Endereço não encontrado!"));
-        Double subTotal = calcularValorTotalPedido(pedidoDTO.getProdutoQtd());
+        Double subTotal = BigDecimal.valueOf(calcularValorTotalPedido(pedidoDTO.getProdutoQtd()))
+                .setScale(2, RoundingMode.HALF_UP)
+                .doubleValue();
         PedidoModel pedidoModel = new PedidoModel(pedidoDTO);
         pedidoModel.setDataPedido(Date.from(ZonedDateTime.now(ZoneId.of("America/Sao_Paulo")).toInstant()));
         pedidoModel.setClienteId(clienteSalvo);
         pedidoModel.setEnderecoId(enderecoSalvo);
         pedidoModel.setSubTotal(subTotal);
-        pedidoModel.setValorTotal(subTotal + pedidoDTO.getFrete());
+        pedidoModel.setValorTotal(BigDecimal.valueOf(subTotal + pedidoDTO.getFrete())
+                .setScale(2, RoundingMode.HALF_UP)
+                .doubleValue());
 
         PedidoModel pedidoSalvo = pedidoRepository.save(pedidoModel);
         pedidoDTO.getProdutoQtd().forEach(
@@ -64,17 +70,18 @@ public class PedidoService {
         return ResponseEntity.ok(new PedidoResponseDTO(pedidoSalvo, itemPedidoModelSalvo));
     }
 
-    private Double calcularValorTotalPedido(List<ProdutoQtdDTO> produtoQtd){
+    private Double calcularValorTotalPedido(List<ProdutoQtdDTO> produtoQtd) {
         return produtoQtd.stream()
                 .mapToDouble(produtoQtdDTO -> produtoQtdDTO.getValorUnitario() * produtoQtdDTO.getQuantidade())
                 .sum();
     }
 
-    private void cadastrarItemPedido(PedidoModel pedidoModel, ProdutoModel produtoModel,ProdutoQtdDTO produtoQtd) {
-            ItemPedidoModel itemPedidoModel = new ItemPedidoModel(produtoQtd);
-            itemPedidoModel.setId(new ItemPedidoKey(pedidoModel, produtoModel));
-            itemPedidoRepository.save(itemPedidoModel);
+    private void cadastrarItemPedido(PedidoModel pedidoModel, ProdutoModel produtoModel, ProdutoQtdDTO produtoQtd) {
+        ItemPedidoModel itemPedidoModel = new ItemPedidoModel(produtoQtd);
+        itemPedidoModel.setId(new ItemPedidoKey(pedidoModel, produtoModel));
+        itemPedidoRepository.save(itemPedidoModel);
     }
+
     public ResponseEntity<List<PedidoModel>> listarPedidosUsuario(Long id) throws Exception {
         ClienteModel cliente = clienteRepository.findById(id).orElseThrow(
                 () -> new Exception("Usuário não encontrado com esse ID"));
