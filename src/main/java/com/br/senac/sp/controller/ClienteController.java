@@ -2,12 +2,14 @@ package com.br.senac.sp.controller;
 
 import com.br.senac.sp.dto.AlterarClienteDTO;
 import com.br.senac.sp.dto.CadastroClienteDTO;
+import com.br.senac.sp.model.EnderecoModel;
 import com.br.senac.sp.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.List;
 
 @RestController
 @CrossOrigin("*")
@@ -30,4 +32,10 @@ public class ClienteController {
     public ResponseEntity<CadastroClienteDTO> buscarUsuarioPorId(@PathVariable Long id) {
         return clienteService.buscarClientePorId(id);
     }
+
+    @GetMapping("/enderecoEntrega/{id}")
+    public ResponseEntity<EnderecoModel> consultarEnderecoEntrega (@PathVariable Long id) {
+        return clienteService.buscarEnderecoEntrega(id);
+    }
+
 }
