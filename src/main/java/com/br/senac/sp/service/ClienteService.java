@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 @Service
@@ -137,4 +138,17 @@ public class ClienteService {
         dto.setSenha("");
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
+
+    public ResponseEntity<EnderecoModel> buscarEnderecoEntrega(Long idCliente) {
+        ClienteModel cliente = clienteRepository.findById(idCliente)
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado!"));
+
+        EnderecoModel enderecoPadrao = enderecoRepository.findByEntregaAndClienteId(true, cliente);
+        if (enderecoPadrao == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(enderecoPadrao, HttpStatus.OK);
+    }
+
 }
