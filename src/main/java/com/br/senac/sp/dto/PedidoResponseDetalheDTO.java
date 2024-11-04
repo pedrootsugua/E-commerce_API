@@ -1,5 +1,7 @@
 package com.br.senac.sp.dto;
 
+import com.br.senac.sp.model.ItemPedidoModel;
+import com.br.senac.sp.model.PedidoModel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,4 +23,15 @@ public class PedidoResponseDetalheDTO {
     private Double valorTotal;
     private Date dataPedido;
     private EnderecoDTO endereco;
+
+    public PedidoResponseDetalheDTO(PedidoModel pedido, List<ItemPedidoModel> itemPedidoModelSalvo) {
+        this.produtoQtd = pedido.getItemPedidoModel().stream().map(itemPedidoModel -> new ProdutoQtdDTO(itemPedidoModel, itemPedidoModel.getId().getProdutoId().getNomeProduto())).toList();
+        this.formaPagamento = pedido.getFormaPagamento();
+        this.status = pedido.getStatus();
+        this.frete = pedido.getFrete();
+        this.subtotal = pedido.getSubTotal();
+        this.valorTotal = pedido.getValorTotal();
+        this.dataPedido = pedido.getDataPedido();
+        this.endereco = new EnderecoDTO(pedido.getEnderecoId());
+    }
 }
