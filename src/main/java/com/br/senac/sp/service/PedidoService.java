@@ -17,6 +17,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PedidoService {
@@ -82,22 +83,25 @@ public class PedidoService {
         itemPedidoRepository.save(itemPedidoModel);
     }
 
-    public ResponseEntity<List<PedidoModel>> listarPedidosUsuario(Long id) throws Exception {
+    public ResponseEntity<List<PedidoResponseDTO>> listarPedidosUsuario(Long id) throws Exception {
         ClienteModel cliente = clienteRepository.findById(id).orElseThrow(
                 () -> new Exception("Usuário não encontrado com esse ID"));
 
         List<PedidoModel> pedidos = cliente.getPedidos();
+        List<PedidoResponseDTO> pedidoResponseDTOs = pedidos.stream()
+                .map(pedido -> new PedidoResponseDTO(pedido, itemPedidoRepository.findByIdPedidoId(pedido)))
+                .collect(Collectors.toList());
 
-        return new ResponseEntity<>(pedidos, HttpStatus.OK);
+        return new ResponseEntity<>(pedidoResponseDTOs, HttpStatus.OK);
     }
-
-    public ResponseEntity<List<ItemPedidoModel>> listarItensPorPedido(Long pedidoId) throws Exception {
+    public ResponseEntity<PedidoResponseDTO> listarItensPorPedido(Long pedidoId) throws Exception {
         PedidoModel pedido = pedidoRepository.findById(pedidoId).orElseThrow(
                 () -> new Exception("Pedido não encontrado com esse ID"));
 
         List<ItemPedidoModel> itens = itemPedidoRepository.findByIdPedidoId(pedido);
+        PedidoResponseDTO pedidoResponseDTO = new PedidoResponseDTO(pedido, itens);
 
-        return new ResponseEntity<>(itens, HttpStatus.OK);
+        return new ResponseEntity<>(pedidoResponseDTO, HttpStatus.OK);
     }
 
 
