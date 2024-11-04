@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 public class PedidoResponseDTO {
-    private List<ProdutoQtdDTO> produtoQtd;
+    private Long id;
     private String formaPagamento;
     private Double frete;
     private String status;
@@ -23,9 +23,10 @@ public class PedidoResponseDTO {
     private Date dataPedido;
     private CadastroClienteDTO cliente;
     private EnderecoDTO endereco;
+    private List<ProdutoQtdDTO> produtoQtd;
 
     public PedidoResponseDTO(PedidoModel pedido, List<ItemPedidoModel> itemPedidoModelSalvo) {
-        this.produtoQtd = itemPedidoModelSalvo.stream().map(ProdutoQtdDTO::new).toList();
+        this.id = pedido.getId();
         this.formaPagamento = pedido.getFormaPagamento();
         this.frete = pedido.getFrete();
         this.status = pedido.getStatus();
@@ -33,5 +34,6 @@ public class PedidoResponseDTO {
         this.dataPedido = pedido.getDataPedido();
         this.cliente = new CadastroClienteDTO(pedido.getClienteId());
         this.endereco = new EnderecoDTO(pedido.getEnderecoId());
+        this.produtoQtd = itemPedidoModelSalvo.stream().map(ProdutoQtdDTO::new).toList();
     }
 }
