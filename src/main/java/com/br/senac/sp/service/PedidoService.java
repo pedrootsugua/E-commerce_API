@@ -1,8 +1,6 @@
 package com.br.senac.sp.service;
 
-import com.br.senac.sp.dto.PedidoRequestDTO;
-import com.br.senac.sp.dto.PedidoResponseDTO;
-import com.br.senac.sp.dto.ProdutoQtdDTO;
+import com.br.senac.sp.dto.*;
 import com.br.senac.sp.keys.ItemPedidoKey;
 import com.br.senac.sp.model.*;
 import com.br.senac.sp.repository.*;
@@ -17,7 +15,6 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PedidoService {
@@ -83,26 +80,13 @@ public class PedidoService {
         itemPedidoRepository.save(itemPedidoModel);
     }
 
-    public ResponseEntity<List<PedidoResponseDTO>> listarPedidosUsuario(Long id) throws Exception {
+    public ResponseEntity<List<PedidoResponseListagemDTO>> listarPedidosUsuario(Long id) throws Exception {
         ClienteModel cliente = clienteRepository.findById(id).orElseThrow(
                 () -> new Exception("Usuário não encontrado com esse ID"));
 
         List<PedidoModel> pedidos = cliente.getPedidos();
-        List<PedidoResponseDTO> pedidoResponseDTOs = pedidos.stream()
-                .map(pedido -> new PedidoResponseDTO(pedido, itemPedidoRepository.findByIdPedidoId(pedido)))
-                .collect(Collectors.toList());
+        List<PedidoResponseListagemDTO> pedidoResponseDTOs = pedidos.stream().map(PedidoResponseListagemDTO::new).toList();
 
         return new ResponseEntity<>(pedidoResponseDTOs, HttpStatus.OK);
     }
-    public ResponseEntity<PedidoResponseDTO> listarItensPorPedido(Long pedidoId) throws Exception {
-        PedidoModel pedido = pedidoRepository.findById(pedidoId).orElseThrow(
-                () -> new Exception("Pedido não encontrado com esse ID"));
-
-        List<ItemPedidoModel> itens = itemPedidoRepository.findByIdPedidoId(pedido);
-        PedidoResponseDTO pedidoResponseDTO = new PedidoResponseDTO(pedido, itens);
-
-        return new ResponseEntity<>(pedidoResponseDTO, HttpStatus.OK);
-    }
-
-
 }
