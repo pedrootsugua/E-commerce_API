@@ -23,4 +23,12 @@ public class ProdutoQtdDTO {
         this.valorUnitario = itemPedidoModel.getValorUnitario();
         this.valorTotal = itemPedidoModel.getSubTotal();
     }
+
+    public ProdutoQtdDTO (ItemPedidoModel itemPedidoModel, String nome) {
+        this.nome = nome;
+        this.idProduto = itemPedidoModel.getId().getProdutoId().getId();
+        this.quantidade = itemPedidoModel.getQuantidade();
+        this.valorUnitario = itemPedidoModel.getValorUnitario();
+        this.valorTotal = itemPedidoModel.getSubTotal();
+    }
 }

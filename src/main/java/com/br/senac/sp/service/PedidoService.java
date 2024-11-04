@@ -89,4 +89,14 @@ public class PedidoService {
 
         return new ResponseEntity<>(pedidoResponseDTOs, HttpStatus.OK);
     }
+
+    public ResponseEntity<PedidoResponseDetalheDTO> detalhePedido(Long pedidoId) {
+        PedidoModel pedido = pedidoRepository.findById(pedidoId).orElseThrow(
+                () -> new RuntimeException("Pedido não encontrado!"));
+
+        List<ItemPedidoModel> itemPedidoModelSalvo = itemPedidoRepository.findByIdPedidoId(pedido);
+        PedidoResponseDetalheDTO pedidoResponseDTOs = new PedidoResponseDetalheDTO(pedido, itemPedidoModelSalvo);
+
+        return new ResponseEntity<>(pedidoResponseDTOs, HttpStatus.OK);
+    }
 }

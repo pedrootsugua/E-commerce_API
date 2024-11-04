@@ -23,9 +23,13 @@ public class PedidoController {
     public ResponseEntity<PedidoResponseDTO> cadastrarPedido(@RequestBody PedidoRequestDTO pedidoDTO) throws Exception {
         return pedidoService.cadastrarPedido(pedidoDTO);
     }
-    @GetMapping("/{id}")
-    public ResponseEntity<List<PedidoResponseListagemDTO>> listaPedidos (@PathVariable (value = "id") Long id) throws Exception {
-        return pedidoService.listarPedidosUsuario(id);
+    @GetMapping("/{clienteId}")
+    public ResponseEntity<List<PedidoResponseListagemDTO>> listaPedidos (@PathVariable (value = "clienteId") Long clienteId) throws Exception {
+        return pedidoService.listarPedidosUsuario(clienteId);
+    }
 
+    @GetMapping("detalhe/{pedidoId}")
+    public ResponseEntity<PedidoResponseDetalheDTO> detalhePedido(@PathVariable (value = "pedidoId") Long pedidoId) throws Exception {
+        return pedidoService.detalhePedido(pedidoId);
     }
 }
