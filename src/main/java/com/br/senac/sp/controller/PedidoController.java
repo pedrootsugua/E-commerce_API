@@ -24,12 +24,12 @@ public class PedidoController {
         return pedidoService.cadastrarPedido(pedidoDTO);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<List<PedidoModel>> listaPedidos (@PathVariable (value = "id") Long id) throws Exception {
+    public ResponseEntity<List<PedidoResponseDTO>> listaPedidos (@PathVariable (value = "id") Long id) throws Exception {
         return pedidoService.listarPedidosUsuario(id);
 
     }
     @GetMapping("/{pedidoId}/itens")
-    public ResponseEntity<List<ItemPedidoModel>> listarItensPorPedido(@PathVariable Long pedidoId) throws Exception {
+    public ResponseEntity<PedidoResponseDTO> listarItensPorPedido(@PathVariable Long pedidoId) throws Exception {
         return pedidoService.listarItensPorPedido(pedidoId);
     }
 
