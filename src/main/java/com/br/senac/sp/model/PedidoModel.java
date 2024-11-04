@@ -32,9 +32,6 @@ public class PedidoModel {
     @Column(name = "dataPedido", nullable = false)
     private Date dataPedido;
 
-    @Column(name = "dataEntrega")
-    private Date dataEntrega;
-
     @Column(name = "status", nullable = false)
     private String status;
 
