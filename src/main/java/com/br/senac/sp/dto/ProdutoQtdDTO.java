@@ -11,6 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProdutoQtdDTO {
+    private String nome;
     private Long idProduto;
     private Integer quantidade;
     private Double valorUnitario;

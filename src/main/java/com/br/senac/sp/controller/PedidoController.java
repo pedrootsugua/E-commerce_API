@@ -2,8 +2,8 @@ package com.br.senac.sp.controller;
 
 import com.br.senac.sp.dto.PedidoRequestDTO;
 import com.br.senac.sp.dto.PedidoResponseDTO;
-import com.br.senac.sp.model.ItemPedidoModel;
-import com.br.senac.sp.model.PedidoModel;
+import com.br.senac.sp.dto.PedidoResponseDetalheDTO;
+import com.br.senac.sp.dto.PedidoResponseListagemDTO;
 import com.br.senac.sp.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,13 +24,8 @@ public class PedidoController {
         return pedidoService.cadastrarPedido(pedidoDTO);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<List<PedidoResponseDTO>> listaPedidos (@PathVariable (value = "id") Long id) throws Exception {
+    public ResponseEntity<List<PedidoResponseListagemDTO>> listaPedidos (@PathVariable (value = "id") Long id) throws Exception {
         return pedidoService.listarPedidosUsuario(id);
 
     }
-    @GetMapping("/{pedidoId}/itens")
-    public ResponseEntity<PedidoResponseDTO> listarItensPorPedido(@PathVariable Long pedidoId) throws Exception {
-        return pedidoService.listarItensPorPedido(pedidoId);
-    }
-
 }
