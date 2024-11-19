@@ -32,4 +32,9 @@ public class PedidoController {
     public ResponseEntity<PedidoResponseDetalheDTO> detalhePedido(@PathVariable (value = "pedidoId") Long pedidoId) throws Exception {
         return pedidoService.detalhePedido(pedidoId);
     }
+
+    @GetMapping("/Estoquista")
+    public ResponseEntity<List<PedidoResponseListagemDTO>> listarTodosPedidos() {
+        return pedidoService.listarTodosPedidos();
+    }
 }

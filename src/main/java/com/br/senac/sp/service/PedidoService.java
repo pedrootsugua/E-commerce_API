@@ -15,6 +15,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PedidoService {
@@ -98,5 +99,14 @@ public class PedidoService {
         PedidoResponseDetalheDTO pedidoResponseDTOs = new PedidoResponseDetalheDTO(pedido, itemPedidoModelSalvo);
 
         return new ResponseEntity<>(pedidoResponseDTOs, HttpStatus.OK);
+    }
+
+    public ResponseEntity<List<PedidoResponseListagemDTO>> listarTodosPedidos() {
+        List<PedidoModel> pedidos = pedidoRepository.findAll();
+        List<PedidoResponseListagemDTO> pedidoResponseListagemDTOs = pedidos.stream()
+                .map(PedidoResponseListagemDTO::new)
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(pedidoResponseListagemDTOs, HttpStatus.OK);
     }
 }
