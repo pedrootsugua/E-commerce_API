@@ -29,9 +29,6 @@ public class PedidoService {
     private ClienteRepository clienteRepository;
 
     @Autowired
-    private CredencialClienteRepository credencialClienteRepository;
-
-    @Autowired
     private EnderecoRepository enderecoRepository;
 
     @Autowired
@@ -40,7 +37,6 @@ public class PedidoService {
     public ResponseEntity<PedidoResponseDTO> cadastrarPedido(PedidoRequestDTO pedidoDTO) throws Exception {
         ClienteModel clienteSalvo = clienteRepository.findById(pedidoDTO.getClienteId()).orElseThrow(
                 () -> new RuntimeException("Cliente não encontrado!"));
-        CredencialClienteModel credencialClienteSalva = credencialClienteRepository.findByClienteId(clienteSalvo);
         EnderecoModel enderecoSalvo = enderecoRepository.findById(pedidoDTO.getEnderecoId()).orElseThrow(
                 () -> new RuntimeException("Endereço não encontrado!"));
         Double subTotal = BigDecimal.valueOf(calcularValorTotalPedido(pedidoDTO.getProdutoQtd()))
@@ -102,7 +98,7 @@ public class PedidoService {
     }
 
     public ResponseEntity<List<PedidoResponseListagemDTO>> listarTodosPedidos() {
-        List<PedidoModel> pedidos = pedidoRepository.findAll();
+        List<PedidoModel> pedidos = pedidoRepository.findAll().reversed();
         List<PedidoResponseListagemDTO> pedidoResponseListagemDTOs = pedidos.stream()
                 .map(PedidoResponseListagemDTO::new)
                 .collect(Collectors.toList());

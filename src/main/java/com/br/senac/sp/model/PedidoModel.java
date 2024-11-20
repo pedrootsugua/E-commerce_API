@@ -58,7 +58,7 @@ public class PedidoModel {
     private EnderecoModel enderecoId;
 
     @OneToMany(mappedBy = "id.pedidoId", cascade = CascadeType.ALL)
-    private List<ItemPedidoModel> itemPedidoModel;
+    private List<ItemPedidoModel> itensPedidoModel;
 
     public PedidoModel(PedidoRequestDTO dto) {
         this.status = "aguardando pagamento";
