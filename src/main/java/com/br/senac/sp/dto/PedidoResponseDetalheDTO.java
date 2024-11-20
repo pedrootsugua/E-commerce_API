@@ -25,7 +25,7 @@ public class PedidoResponseDetalheDTO {
     private EnderecoDTO endereco;
 
     public PedidoResponseDetalheDTO(PedidoModel pedido, List<ItemPedidoModel> itemPedidoModelSalvo) {
-        this.produtoQtd = pedido.getItemPedidoModel().stream().map(itemPedidoModel -> new ProdutoQtdDTO(itemPedidoModel, itemPedidoModel.getId().getProdutoId().getNomeProduto())).toList();
+        this.produtoQtd = pedido.getItensPedidoModel().stream().map(itemPedidoModel -> new ProdutoQtdDTO(itemPedidoModel, itemPedidoModel.getId().getProdutoId().getNomeProduto())).toList();
         this.formaPagamento = pedido.getFormaPagamento();
         this.status = pedido.getStatus();
         this.frete = pedido.getFrete();

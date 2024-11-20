@@ -24,7 +24,7 @@ public class CarrinhoService {
     private ProdutoRepository produtoRepository;
 
     public ResponseEntity<CarrinhoBuscarNLResponseDTO> buscarCarrinhoNL(CarrinhoBuscarNLRequestDTO dto) {
-        Map<String, Integer> elementCountMap = countOccurrences(dto.getListaIds());
+        Map<String, Integer> elementCountMap = contarOcorrencias(dto.getListaIds());
         List<ProdutoModel> produtos = produtoRepository.findByIdIn(new ArrayList<>(elementCountMap.keySet()));
 
         List<ProdutoRetornoDTO> produtosRetorno = produtos.stream()
@@ -47,7 +47,7 @@ public class CarrinhoService {
         return ResponseEntity.ok(response);
     }
 
-    public static Map<String, Integer> countOccurrences(List<String> list) {
+    private static Map<String, Integer> contarOcorrencias(List<String> list) {
         Map<String, Integer> elementCountMap = new HashMap<>();
 
         for (String element : list) {
