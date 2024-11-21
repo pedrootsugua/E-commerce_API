@@ -1,9 +1,6 @@
 package com.br.senac.sp.controller;
 
-import com.br.senac.sp.dto.PedidoRequestDTO;
-import com.br.senac.sp.dto.PedidoResponseDTO;
-import com.br.senac.sp.dto.PedidoResponseDetalheDTO;
-import com.br.senac.sp.dto.PedidoResponseListagemDTO;
+import com.br.senac.sp.dto.*;
 import com.br.senac.sp.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,5 +33,10 @@ public class PedidoController {
     @GetMapping("/Estoquista")
     public ResponseEntity<List<PedidoResponseListagemDTO>> listarTodosPedidos() {
         return pedidoService.listarTodosPedidos();
+    }
+
+    @PatchMapping("/alterarStatus")
+    public ResponseEntity<PedidoResponseDTO> alterarStatusPedido(@RequestBody AlterarPedidoRequest dto) throws Exception {
+        return pedidoService.alterarStatusPedido(dto);
     }
 }

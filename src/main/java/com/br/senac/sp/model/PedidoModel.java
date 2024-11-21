@@ -2,7 +2,7 @@ package com.br.senac.sp.model;
 
 import com.br.senac.sp.constants.Pagamento;
 import com.br.senac.sp.dto.PedidoRequestDTO;
-import com.br.senac.sp.exception.InvalidPaymentMethodException;
+import com.br.senac.sp.exception.OpcaoInvalidaException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -61,11 +61,11 @@ public class PedidoModel {
     private List<ItemPedidoModel> itensPedidoModel;
 
     public PedidoModel(PedidoRequestDTO dto) {
-        this.status = "aguardando pagamento";
+        this.status = "Aguardando pagamento";
         if (Pagamento.isValid(dto.getFormaPagamento())) {
             this.formaPagamento = dto.getFormaPagamento();
         } else {
-            throw new InvalidPaymentMethodException("Método de pagamento inválido. Os tipos de pagamento aceitos são:" + String.join(", ", Arrays.toString(Pagamento.values())));
+            throw new OpcaoInvalidaException("Método de pagamento inválido. Os tipos de pagamento aceitos são:" + String.join(", ", Arrays.toString(Pagamento.values())));
         }
         this.frete = dto.getFrete();
     }

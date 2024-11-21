@@ -16,9 +16,9 @@ import java.util.Set;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(InvalidPaymentMethodException.class)
+    @ExceptionHandler(OpcaoInvalidaException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<String> handleInvalidPaymentMethodException(InvalidPaymentMethodException ex) {
+    public ResponseEntity<String> handleInvalidPaymentMethodException(OpcaoInvalidaException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
