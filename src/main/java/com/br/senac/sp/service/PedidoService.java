@@ -1,6 +1,9 @@
 package com.br.senac.sp.service;
 
+import com.br.senac.sp.constants.Pagamento;
+import com.br.senac.sp.constants.StatusPedido;
 import com.br.senac.sp.dto.*;
+import com.br.senac.sp.exception.OpcaoInvalidaException;
 import com.br.senac.sp.keys.ItemPedidoKey;
 import com.br.senac.sp.model.*;
 import com.br.senac.sp.repository.*;
@@ -13,6 +16,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -104,5 +108,21 @@ public class PedidoService {
                 .collect(Collectors.toList());
 
         return new ResponseEntity<>(pedidoResponseListagemDTOs, HttpStatus.OK);
+    }
+
+    public ResponseEntity<PedidoResponseDTO> alterarStatusPedido(AlterarPedidoRequest dto) {
+        PedidoModel pedido = pedidoRepository.findById(dto.getIdPedido()).orElseThrow(
+                () -> new RuntimeException("Pedido não encontrado!"));
+
+        if (StatusPedido.exists(dto.getStatus())) {
+            pedido.setStatus(dto.getStatus());
+            PedidoModel pedidoSalvo = pedidoRepository.save(pedido);
+            return ResponseEntity.ok(new PedidoResponseDTO(pedidoSalvo, itemPedidoRepository.findByIdPedidoId(pedidoSalvo)));
+        } else {
+            throw new OpcaoInvalidaException("Status do pedido inválido. Os tipos de status aceitos são: " +
+                    Arrays.stream(StatusPedido.values())
+                            .map(StatusPedido::getDisplayName)
+                            .collect(Collectors.joining(", ")));
+        }
     }
 }
